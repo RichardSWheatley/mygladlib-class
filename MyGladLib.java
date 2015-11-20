@@ -14,7 +14,6 @@ public class MyGladLib {
     private ArrayList<String> usedList = new ArrayList<String>();
 
     private Random myRandom;
-    private ArrayList<String> wordsList = new ArrayList<String>();
 
     private static String dataSourceURL = "http://dukelearntoprogram.com/course3/data";
     private static String dataSourceDirectory = "data";
@@ -35,16 +34,10 @@ public class MyGladLib {
         String sentence ="adjective,noun,color,country,name,verb,animal,timeframe,fruit";
         String [] words = sentence.split(",");
         ArrayList<String> wordList = new ArrayList<String>(Arrays.asList(words));
+
         for(String word : wordList)
             multiMap.put(word, readIt(source+"/"+word+".txt"));
-//         multiMap.put("noun", readIt(source+"/noun.txt"));
-//         multiMap.put("color", readIt(source+"/color.txt"));
-//         multiMap.put("country", readIt(source+"/country.txt"));
-//         multiMap.put("name", readIt(source+"/name.txt"));
-//         multiMap.put("verb", readIt(source+"/verb.txt"));
-//         multiMap.put("animal", readIt(source+"/animal.txt"));
-//         multiMap.put("timeframe", readIt(source+"/timeframe.txt"));
-//         multiMap.put("fruit", readIt(source+"/fruit.txt"));
+
         usedList.clear();
     }
 
