@@ -41,7 +41,7 @@ public class MyGladLib {
 	private String getSubstitute(String label) {
 
 		if (multiMap.keySet().contains(label)){
-			return randomFrom(fruitList);
+			return randomFrom(multiMap.get(label));
 		}
 		else if (label.equals("number")){
 			return ""+myRandom.nextInt(50)+5;
