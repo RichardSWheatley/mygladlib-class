@@ -20,7 +20,6 @@ public class MyGladLib {
 
     public MyGladLib(){
         initializeFromSource(dataSourceDirectory);
-
 //      initializeFromSource(dataSourceURL);
         myRandom = new Random();
     }
@@ -31,13 +30,9 @@ public class MyGladLib {
     }
 
     private void initializeFromSource(String source) {
-        String sentence ="adjective,noun,color,country,name,verb,animal,timeframe,fruit";
-        String [] words = sentence.split(",");
-        ArrayList<String> wordList = new ArrayList<String>(Arrays.asList(words));
-
-        for(String word : wordList)
+        String [] words = {"adjective","noun","color","country","name","verb","animal","timeframe","fruit"};
+        for(String word : words)
             multiMap.put(word, readIt(source+"/"+word+".txt"));
-
         usedList.clear();
     }
 
