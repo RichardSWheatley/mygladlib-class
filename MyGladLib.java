@@ -1,3 +1,10 @@
+
+/**
+ * Write a description of MyGladLib here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
 import edu.duke.*;
 import java.util.*;
 
@@ -23,14 +30,14 @@ public class MyGladLib {
 
 	private void initializeFromSource(String source) {
 		multiMap.put("adjective", readIt(source+"/adjective.txt"));
-		multiMap.put("noun", readItreadIt(source+"/noun.txt"));
-		multiMap.put("color", readItreadIt(source+"/color.txt"));
-		multiMap.put("country", readItreadIt(source+"/country.txt"));
-		multiMap.put("name", readItreadIt(source+"/name.txt"));
-		multiMap.put("verb", readItreadIt(source+"/verb.txt"));
-		multiMap.put("animal", readItreadIt(source+"/animal.txt"));
-		multiMap.put("timeframe", readItreadIt(source+"/timeframe.txt"));
-		multiMap.put("fruit", readItreadIt(source+"/fruit.txt"));
+		multiMap.put("noun", readIt(source+"/noun.txt"));
+		multiMap.put("color", readIt(source+"/color.txt"));
+		multiMap.put("country", readIt(source+"/country.txt"));
+		multiMap.put("name", readIt(source+"/name.txt"));
+		multiMap.put("verb", readIt(source+"/verb.txt"));
+		multiMap.put("animal", readIt(source+"/animal.txt"));
+		multiMap.put("timeframe", readIt(source+"/timeframe.txt"));
+		multiMap.put("fruit", readIt(source+"/fruit.txt"));
 	}
 
 	private String randomFrom(ArrayList<String> source){
@@ -109,10 +116,7 @@ public class MyGladLib {
 
 	public void makeStory(){
 	    System.out.println("\n");
-		String story = fromTemplate("data/madtemplate3.txt");
+		String story = fromTemplate("data/madtemplate2.txt");
 		printOut(story, 60);
 	}
-
-
-
 }
