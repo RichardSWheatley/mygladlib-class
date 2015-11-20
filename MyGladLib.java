@@ -1,8 +1,8 @@
 
 /**
  * Write a description of MyGladLib here.
- *
- * @author (your name)
+ * 
+ * @author (your name) 
  * @version (a version number or a date)
  */
 import edu.duke.*;
@@ -10,113 +10,125 @@ import java.util.*;
 
 public class MyGladLib {
 
-  private Map<String,ArrayList<String>> multiMap = new HashMap<String,ArrayList<String>>();
-  private Random myRandom;
+    private Map<String,ArrayList<String>> multiMap = new HashMap<String,ArrayList<String>>();
+    private ArrayList<String> usedList = new ArrayList<String>();
 
-	private static String dataSourceURL = "http://dukelearntoprogram.com/course3/data";
-	private static String dataSourceDirectory = "data";
+    private Random myRandom;
+    private ArrayList<String> wordsList = new ArrayList<String>();
 
-	public MyGladLib(){
-		initializeFromSource(dataSourceDirectory);
+    private static String dataSourceURL = "http://dukelearntoprogram.com/course3/data";
+    private static String dataSourceDirectory = "data";
 
-// 		initializeFromSource(dataSourceURL);
-		myRandom = new Random();
-	}
+    public MyGladLib(){
+        initializeFromSource(dataSourceDirectory);
 
-	public MyGladLib(String source){
-		initializeFromSource(source);
-		myRandom = new Random();
-	}
+//      initializeFromSource(dataSourceURL);
+        myRandom = new Random();
+    }
 
-	private void initializeFromSource(String source) {
-		multiMap.put("adjective", readIt(source+"/adjective.txt"));
-		multiMap.put("noun", readIt(source+"/noun.txt"));
-		multiMap.put("color", readIt(source+"/color.txt"));
-		multiMap.put("country", readIt(source+"/country.txt"));
-		multiMap.put("name", readIt(source+"/name.txt"));
-		multiMap.put("verb", readIt(source+"/verb.txt"));
-		multiMap.put("animal", readIt(source+"/animal.txt"));
-		multiMap.put("timeframe", readIt(source+"/timeframe.txt"));
-		multiMap.put("fruit", readIt(source+"/fruit.txt"));
-	}
+    public MyGladLib(String source){
+        initializeFromSource(source);
+        myRandom = new Random();
+    }
 
-	private String randomFrom(ArrayList<String> source){
-		int index = myRandom.nextInt(source.size());
-		return source.get(index);
-	}
+    private void initializeFromSource(String source) {
+        String sentence ="adjective,noun,color,country,name,verb,animal,timeframe,fruit";
+        String [] words = sentence.split(",");
+        ArrayList<String> wordList = new ArrayList<String>(Arrays.asList(words));
+        for(String word : wordList)
+            multiMap.put(word, readIt(source+"/"+word+".txt"));
+//         multiMap.put("noun", readIt(source+"/noun.txt"));
+//         multiMap.put("color", readIt(source+"/color.txt"));
+//         multiMap.put("country", readIt(source+"/country.txt"));
+//         multiMap.put("name", readIt(source+"/name.txt"));
+//         multiMap.put("verb", readIt(source+"/verb.txt"));
+//         multiMap.put("animal", readIt(source+"/animal.txt"));
+//         multiMap.put("timeframe", readIt(source+"/timeframe.txt"));
+//         multiMap.put("fruit", readIt(source+"/fruit.txt"));
+        usedList.clear();
+    }
 
-	private String getSubstitute(String label) {
+    private String randomFrom(ArrayList<String> source){
+        int index = myRandom.nextInt(source.size());
+        if(usedList != null)
+            while(usedList.contains(source.get(index)))
+                index = myRandom.nextInt(source.size());
+        return source.get(index);
+    }
 
-		if (multiMap.keySet().contains(label)){
-			return randomFrom(multiMap.get(label));
-		}
-		else if (label.equals("number")){
-			return ""+myRandom.nextInt(50)+5;
-		}
-		return "**UNKNOWN**";
-	}
+    private String getSubstitute(String label) {
 
-	private String processWord(String w){
-		int first = w.indexOf("<");
-		int last = w.indexOf(">",first);
-		if (first == -1 || last == -1){
-			return w;
-		}
-		String prefix = w.substring(0,first);
-		String suffix = w.substring(last+1);
-		String sub = getSubstitute(w.substring(first+1,last));
-		return prefix+sub+suffix;
-	}
+        if (multiMap.keySet().contains(label)){
+            return randomFrom(multiMap.get(label));
+        }
+        else if (label.equals("number")){
+            return ""+myRandom.nextInt(50)+5;
+        }
+        return "**UNKNOWN**";
+    }
 
-	private void printOut(String s, int lineWidth){
-		int charsWritten = 0;
-		for(String w : s.split("\\s+")){
-			if (charsWritten + w.length() > lineWidth){
-				System.out.println();
-				charsWritten = 0;
-			}
-			System.out.print(w+" ");
-			charsWritten += w.length() + 1;
-		}
-	}
+    private String processWord(String w){
+        int first = w.indexOf("<");
+        int last = w.indexOf(">",first);
+        if (first == -1 || last == -1){
+            return w;
+        }
+        String prefix = w.substring(0,first);
+        String suffix = w.substring(last+1);
+        String sub = getSubstitute(w.substring(first+1,last));
+        usedList.add(sub);
+        return prefix+sub+suffix;
+    }
 
-	private String fromTemplate(String source){
-		String story = "";
-		if (source.startsWith("http")) {
-			URLResource resource = new URLResource(source);
-			for(String word : resource.words()){
-				story = story + processWord(word) + " ";
-			}
-		}
-		else {
-			FileResource resource = new FileResource(source);
-			for(String word : resource.words()){
-				story = story + processWord(word) + " ";
-			}
-		}
-		return story;
-	}
+    private void printOut(String s, int lineWidth){
+        int charsWritten = 0;
+        for(String w : s.split("\\s+")){
+            if (charsWritten + w.length() > lineWidth){
+                System.out.println();
+                charsWritten = 0;
+            }
+            System.out.print(w+" ");
+            charsWritten += w.length() + 1;
+        }
+    }
 
-	private ArrayList<String> readIt(String source){
-		ArrayList<String> list = new ArrayList<String>();
-		if (source.startsWith("http")) {
-			URLResource resource = new URLResource(source);
-			for(String line : resource.lines()){
-				list.add(line);
-			}
-		}
-		else {
-			FileResource resource = new FileResource(source);
-			for(String line : resource.lines()){
-				list.add(line);
-			}
-		}
-		return list;
-	}
+    private String fromTemplate(String source){
+        String story = "";
+        if (source.startsWith("http")) {
+            URLResource resource = new URLResource(source);
+            for(String word : resource.words()){
+                story = story + processWord(word) + " ";
+            }
+        }
+        else {
+            FileResource resource = new FileResource(source);
+            for(String word : resource.words()){
+                story = story + processWord(word) + " ";
+            }
+        }
+        return story;
+    }
 
-	public void makeStory(){
-	    System.out.println("\n");
-		String story = fromTemplate("data/madtemplate2.txt");
-		printOut(story, 60);
-	}
+    private ArrayList<String> readIt(String source){
+        ArrayList<String> list = new ArrayList<String>();
+        if (source.startsWith("http")) {
+            URLResource resource = new URLResource(source);
+            for(String line : resource.lines()){
+                list.add(line);
+            }
+        }
+        else {
+            FileResource resource = new FileResource(source);
+            for(String line : resource.lines()){
+                list.add(line);
+            }
+        }
+        return list;
+    }
+
+    public void makeStory(){
+        System.out.println("\n");
+        String story = fromTemplate("data/madtemplate2.txt");
+        printOut(story, 60);
+    }
 }
